@@ -1,5 +1,5 @@
 <?php
-require "conexion.php";
+require __DIR__ . "/../models/conexion.php";
 
 $id = isset($_GET["id"]) ? (int)$_GET["id"] : 0;
 if ($id <= 0) {
@@ -22,7 +22,7 @@ if (!$tarea) {
     exit;
 }
 
-include("includes/header.php");
+include __DIR__ . "/../includes/header.php";
 ?>
 
 <div class="form-container">
@@ -69,4 +69,6 @@ include("includes/header.php");
   </div>
 </div>
 
-<?php include("includes/footer.php"); ?>
+<?php 
+  include __DIR__ . "/../includes/footer.php"
+?>

@@ -1,5 +1,5 @@
 <?php
-require "conexion.php";
+require __DIR__ . "/../models/conexion.php";
 
 $pendientes  = [];
 $en_curso    = [];
@@ -29,7 +29,7 @@ $total_tareas   = count($pendientes) + count($en_curso) + count($terminadas);
 $completadas    = count($terminadas);
 $nuevas         = $total_tareas; // puedes cambiar esta lógica si quieres
 
-include("includes/header.php");
+include __DIR__ . "/../includes/header.php";
 ?>
 
 <section class="stats">
@@ -59,7 +59,9 @@ include("includes/header.php");
       <?php else: ?>
         <?php foreach ($pendientes as $t): ?>
           <li>
-            <a href="ver_tarea.php?id=<?php echo $t['id']; ?>">
+            <a href="#"
+              class="task-link"
+              data-id="<?php echo $t['id']; ?>">
               <?php echo htmlspecialchars($t['titulo']); ?>
             </a>
           </li>
@@ -76,7 +78,9 @@ include("includes/header.php");
       <?php else: ?>
         <?php foreach ($en_curso as $t): ?>
           <li>
-            <a href="ver_tarea.php?id=<?php echo $t['id']; ?>">
+            <a href="#"
+              class="task-link"
+              data-id="<?php echo $t['id']; ?>">
               <?php echo htmlspecialchars($t['titulo']); ?>
             </a>
           </li>
@@ -91,13 +95,15 @@ include("includes/header.php");
       <?php if (empty($terminadas)): ?>
         <li>No hay tareas terminadas</li>
       <?php else: ?>
-        <?php foreach ($terminadas as $t): ?>
-          <li>
-            <a href="ver_tarea.php?id=<?php echo $t['id']; ?>">
-              <?php echo htmlspecialchars($t['titulo']); ?>
-            </a>
-          </li>
-        <?php endforeach; ?>
+          <?php foreach ($terminadas as $t): ?>
+            <li>
+              <a href="#"
+                class="task-link"
+                data-id="<?php echo $t['id']; ?>">
+                <?php echo htmlspecialchars($t['titulo']); ?>
+              </a>
+            </li>
+          <?php endforeach; ?>
       <?php endif; ?>
     </ul>
   </div>
@@ -107,4 +113,53 @@ include("includes/header.php");
   <a href="agregar_tarea.php" class="btn-primary">+ Nueva tarea</a>
 </div>
 
-<?php include("includes/footer.php"); ?>
+<div id="task-modal-overlay" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <button id="modal-close" class="close-btn">&times;</button>
+    <div id="task-modal-content">
+      <!-- Aquí se cargará la info de la tarea -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const modalOverlay = document.getElementById('task-modal-overlay');
+  const modalContent = document.getElementById('task-modal-content');
+  const modalClose   = document.getElementById('modal-close');
+
+  // Abrir modal al hacer clic en una tarea
+  document.querySelectorAll('.task-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const id = this.dataset.id;
+
+      // Cargar contenido vía AJAX
+      fetch('../modals/ver_tarea_modal.php?id=' + id)
+        .then(response => response.text())
+        .then(html => {
+          modalContent.innerHTML = html;
+          modalOverlay.style.display = 'flex';
+        })
+        .catch(err => {
+          modalContent.innerHTML = '<p>Error al cargar la tarea.</p>';
+          modalOverlay.style.display = 'flex';
+        });
+    });
+  });
+
+  // Cerrar modal al hacer clic en la X
+  modalClose.addEventListener('click', () => {
+    modalOverlay.style.display = 'none';
+  });
+
+  // Cerrar modal al hacer clic fuera de la caja
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.style.display = 'none';
+    }
+  });
+</script>
+
+<?php 
+  include __DIR__ . "/../includes/footer.php"
+?>

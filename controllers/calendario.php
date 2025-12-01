@@ -1,4 +1,4 @@
-<?php include("includes/header.php"); ?>
+<?php include __DIR__ . "/../includes/header.php"; ?>
 
 <h2>Calendario de tareas</h2>
 <p>Aquí podrás visualizar las tareas por fecha o mes.</p>
@@ -10,4 +10,6 @@
   </iframe>
 </section>
 
-<?php include("includes/footer.php"); ?>
+<?php 
+  include __DIR__ . "/../includes/footer.php"
+?>
