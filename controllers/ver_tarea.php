@@ -63,7 +63,7 @@ include __DIR__ . "/../includes/header.php";
     </p>
 
     <div class="btn-group" style="margin-top: 1rem;">
-      <a href="editar_tarea.php?id=<?php echo $tarea['id']; ?>" class="btn-primary">Editar</a>
+      <a href="editar_tarea.php?id=<?php echo $tarea['id']; ?>" class="btn-primary-editar">Editar</a>
       <a href="dashboard.php" class="btn-primary">Volver</a>
     </div>
   </div>

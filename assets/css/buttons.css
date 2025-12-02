@@ -1,0 +1,63 @@
+/* ====== BUTTONS ====== */
+
+.btn-container {
+  text-align: center;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: #1e40af;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  min-width: 180px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  text-decoration: none;
+}
+
+.btn-primary-editar {
+  background-color: #1e40af;
+  color: white;
+  padding: 6px 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background-color: #0b2f91;
+  transform: translateY(-2px);
+}
+
+/* Botón eliminar */
+.btn-delete {
+  background-color: #fff;
+  color: #d32f2f;
+  border: 2px solid #d32f2f;
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 25px;
+}

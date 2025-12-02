@@ -110,12 +110,12 @@ include __DIR__ . "/../includes/header.php";
 </section>
 
 <div class="btn-container">
-  <a href="agregar_tarea.php" class="btn-primary">+ Nueva tarea</a>
+  <a href="agregar_tarea.php" class="btn-primary">Nueva tarea</a>
 </div>
 
 <div id="task-modal-overlay" class="modal-overlay" style="display:none;">
   <div class="modal-box">
-    <button id="modal-close" class="close-btn">&times;</button>
+    <button id="modal-close" class="modal-close-btn">&times;</button>
     <div id="task-modal-content">
       <!-- Aquí se cargará la info de la tarea -->
     </div>

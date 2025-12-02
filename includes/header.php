@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Gestión de Tareas</title>
-  <link rel="stylesheet" href="/gestion_tareas/assets/css/estilos.css">
+  <link rel="stylesheet" href="/gestion_tareas/assets/css/global.css">
+  <link rel="stylesheet" href="/gestion_tareas/assets/css/layout.css">
+  <link rel="stylesheet" href="/gestion_tareas/assets/css/main.css">
+  <link rel="stylesheet" href="/gestion_tareas/assets/css/buttons.css">
+  <link rel="stylesheet" href="/gestion_tareas/assets/css/forms.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>

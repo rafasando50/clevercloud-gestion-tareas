@@ -1,0 +1,81 @@
+/* ====== LAYOUT (SIDEBAR + TOPBAR + FOOTER) ====== */
+
+/* Sidebar */
+.sidebar {
+  width: 70px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo img {
+  width: 40px;
+  margin-bottom: 20px;
+}
+
+.nav-links {
+  list-style: none;
+}
+
+.nav-links li {
+  margin: 20px 0;
+}
+
+.nav-links a {
+  font-size: 22px;
+  text-decoration: none;
+  color: #888;
+}
+
+.nav-links a.active {
+  color: #1e40af;
+  font-weight: bold;
+  border-left: 3px solid #1e40af;
+  padding-left: 6px;
+}
+
+/* Topbar */
+.topbar {
+  background-color: #1e40af;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  color: #1e40af;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  background: #f1f1f1;
+  margin-top: auto;
+}
