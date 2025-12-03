@@ -1,8 +1,10 @@
 <?php
 require __DIR__ . '/../models/conexion.php';
 
+// Verificar que llegaron los datos
 if (!isset($_POST['id'], $_POST['estado'])) {
-    header('Location: ../controllers/dashboard.php');
+    http_response_code(400);
+    echo "Faltan datos";
     exit;
 }
 
@@ -13,14 +15,19 @@ $nuevoEstado = $_POST['estado'];
 $estadosValidos = ['pendiente', 'en_curso', 'terminada'];
 
 if (!in_array($nuevoEstado, $estadosValidos, true)) {
-    header('Location: ../controllers/dashboard.php?error=estado_invalido');
+    http_response_code(400);
+    echo "Estado inválido";
     exit;
 }
 
 $stmt = $conn->prepare("UPDATE tareas SET estado = ? WHERE id = ?");
 $stmt->bind_param("si", $nuevoEstado, $id);
-$stmt->execute();
-$stmt->close();
 
-header('Location: ../controllers/dashboard.php');
-exit;
+if ($stmt->execute()) {
+    echo "ok"; // respuesta para el fetch()
+} else {
+    http_response_code(500);
+    echo "Error al actualizar";
+}
+
+$stmt->close();

@@ -52,16 +52,21 @@ include __DIR__ . "/../includes/header.php";
 
 <section class="boards">
   <div class="board">
-    <h3>Pendientes</h3>
-    <ul>
+    <h3>
+      Pendientes
+        <span class="column-count" data-estado="pendiente">
+      (<?php echo count($pendientes); ?>)
+  </span>
+    </h3>
+    <ul class="task-list" data-estado="pendiente">
       <?php if (empty($pendientes)): ?>
-        <li>No hay tareas pendientes</li>
+        <li class="empty-msg">No hay tareas pendientes</li>
       <?php else: ?>
         <?php foreach ($pendientes as $t): ?>
-          <li>
+          <li class="task-item" draggable="true" data-id="<?php echo $t['id']; ?>">
             <a href="#"
-              class="task-link"
-              data-id="<?php echo $t['id']; ?>">
+               class="task-link"
+               data-id="<?php echo $t['id']; ?>">
               <?php echo htmlspecialchars($t['titulo']); ?>
             </a>
           </li>
@@ -71,16 +76,21 @@ include __DIR__ . "/../includes/header.php";
   </div>
 
   <div class="board">
-    <h3>En curso</h3>
-    <ul>
+    <h3>
+      En curso
+        <span class="column-count" data-estado="en_curso">
+      (<?php echo count($en_curso); ?>)
+  </span>
+    </h3>
+    <ul class="task-list" data-estado="en_curso">
       <?php if (empty($en_curso)): ?>
-        <li>No hay tareas en curso</li>
+        <li class="empty-msg">No hay tareas en curso</li>
       <?php else: ?>
         <?php foreach ($en_curso as $t): ?>
-          <li>
+          <li class="task-item" draggable="true" data-id="<?php echo $t['id']; ?>">
             <a href="#"
-              class="task-link"
-              data-id="<?php echo $t['id']; ?>">
+               class="task-link"
+               data-id="<?php echo $t['id']; ?>">
               <?php echo htmlspecialchars($t['titulo']); ?>
             </a>
           </li>
@@ -90,24 +100,31 @@ include __DIR__ . "/../includes/header.php";
   </div>
 
   <div class="board">
-    <h3>Terminadas</h3>
-    <ul>
+    <h3>
+      Terminadas
+        <span class="column-count" data-estado="terminada">
+      (<?php echo count($terminadas); ?>)
+  </span>
+    </h3>
+    <ul class="task-list" data-estado="terminada">
       <?php if (empty($terminadas)): ?>
-        <li>No hay tareas terminadas</li>
+        <li class="empty-msg">No hay tareas terminadas</li>
       <?php else: ?>
-          <?php foreach ($terminadas as $t): ?>
-            <li>
-              <a href="#"
-                class="task-link"
-                data-id="<?php echo $t['id']; ?>">
-                <?php echo htmlspecialchars($t['titulo']); ?>
-              </a>
-            </li>
-          <?php endforeach; ?>
+        <?php foreach ($terminadas as $t): ?>
+          <li class="task-item" draggable="true" data-id="<?php echo $t['id']; ?>">
+            <a href="#"
+               class="task-link"
+               data-id="<?php echo $t['id']; ?>">
+              <?php echo htmlspecialchars($t['titulo']); ?>
+            </a>
+          </li>
+        <?php endforeach; ?>
       <?php endif; ?>
     </ul>
   </div>
 </section>
+
+
 
 <div class="btn-container">
   <a href="agregar_tarea.php" class="btn-primary">Nueva tarea</a>
@@ -127,13 +144,15 @@ include __DIR__ . "/../includes/header.php";
   const modalContent = document.getElementById('task-modal-content');
   const modalClose   = document.getElementById('modal-close');
 
-  // Abrir modal al hacer clic en una tarea
+  // ========================
+  //      MODAL EXISTENTE
+  // ========================
+
   document.querySelectorAll('.task-link').forEach(link => {
     link.addEventListener('click', function (e) {
       e.preventDefault();
       const id = this.dataset.id;
 
-      // Cargar contenido vía AJAX
       fetch('../modals/ver_tarea_modal.php?id=' + id)
         .then(response => response.text())
         .then(html => {
@@ -147,18 +166,125 @@ include __DIR__ . "/../includes/header.php";
     });
   });
 
-  // Cerrar modal al hacer clic en la X
   modalClose.addEventListener('click', () => {
     modalOverlay.style.display = 'none';
   });
 
-  // Cerrar modal al hacer clic fuera de la caja
   modalOverlay.addEventListener('click', (e) => {
     if (e.target === modalOverlay) {
       modalOverlay.style.display = 'none';
     }
   });
+
+  // ========================
+  //        DRAG & DROP
+  // ========================
+
+  let draggedItem = null;
+
+  function getEmptyText(estado) {
+    switch (estado) {
+      case 'pendiente': return 'No hay tareas pendientes';
+      case 'en_curso':  return 'No hay tareas en curso';
+      case 'terminada': return 'No hay tareas terminadas';
+      default:          return 'Sin tareas';
+    }
+  }
+
+  function actualizarMensajeVacio(lista) {
+    const tieneTareas = lista.querySelector('.task-item') !== null;
+    let empty = lista.querySelector('.empty-msg');
+
+    if (tieneTareas) {
+      if (empty) empty.remove();
+    } else {
+      if (!empty) {
+        empty = document.createElement('li');
+        empty.classList.add('empty-msg');
+        empty.textContent = getEmptyText(lista.dataset.estado);
+        lista.appendChild(empty);
+      }
+    }
+  }
+
+  // Hacer drag a cada tarea
+  document.querySelectorAll('.task-item').forEach(item => {
+    item.addEventListener('dragstart', e => {
+      draggedItem = item;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', item.dataset.id);
+    });
+
+    item.addEventListener('dragend', () => {
+      draggedItem = null;
+    });
+  });
+
+  // Hacer drop en las listas (aunque estén vacías)
+  document.querySelectorAll('.task-list').forEach(lista => {
+
+    // Aseguramos que el mensaje vacío esté correcto al inicio
+    actualizarMensajeVacio(lista);
+
+    lista.addEventListener('dragover', e => {
+      e.preventDefault();
+    });
+
+    lista.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!draggedItem) return;
+
+      const listaOrigen  = draggedItem.closest('.task-list');
+      const listaDestino = lista;
+
+      // Mover visualmente
+      listaDestino.appendChild(draggedItem);
+
+      const id          = draggedItem.dataset.id;
+      const nuevoEstado = listaDestino.dataset.estado;
+
+      // Actualizar mensajes vacíos
+      actualizarMensajeVacio(listaOrigen);
+      actualizarMensajeVacio(listaDestino);
+
+      // Llamar al backend
+const estadoAnterior = listaOrigen.dataset.estado;
+
+fetch('../controllers/actualizar_estado_tarea.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: 'id=' + encodeURIComponent(id) +
+        '&estado=' + encodeURIComponent(nuevoEstado)
+})
+.then(r => r.text().then(text => ({ ok: r.ok, status: r.status, text })))
+.then(res => {
+  console.log('Respuesta actualizar_estado:', res);
+
+  if (!res.ok || res.text.trim() !== 'ok') {
+    // Algo falló -> revertimos el cambio visual
+    alert('No se pudo actualizar la tarea: ' + res.text);
+
+    listaOrigen.appendChild(draggedItem);
+    actualizarMensajeVacio(listaOrigen);
+    actualizarMensajeVacio(listaDestino);
+  }
+})
+.catch(err => {
+  console.error('Error en fetch:', err);
+  alert('Error de red al actualizar la tarea');
+
+  // Revertir en caso de error de red
+  listaOrigen.appendChild(draggedItem);
+  actualizarMensajeVacio(listaOrigen);
+  actualizarMensajeVacio(listaDestino);
+});
+
+    });
+  });
 </script>
+
 
 <?php 
   include __DIR__ . "/../includes/footer.php"
