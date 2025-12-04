@@ -80,7 +80,8 @@ $stmt_sub->close();
     <li class="subtask-empty">No hay subtareas</li>
   <?php else: ?>
     <?php foreach ($subtareas as $s): ?>
-      <li class="subtask-item <?php echo $s['completada'] ? 'subtask-completada' : ''; ?>">
+      <li class="subtask-item <?php echo $s['completada'] ? 'subtask-completada' : ''; ?>"
+          data-id="<?php echo $s['id']; ?>">
         <label>
           <input
             type="checkbox"
@@ -90,10 +91,18 @@ $stmt_sub->close();
           >
           <?php echo htmlspecialchars($s['titulo']); ?>
         </label>
+
+        <!-- Botón para borrar la subtarea -->
+        <button type="button"
+                class="subtask-delete-btn"
+                title="Eliminar subtarea">
+          Borrar
+        </button>
       </li>
     <?php endforeach; ?>
   <?php endif; ?>
 </ul>
+
 
 <form class="subtask-form" style="margin-top: 0.75rem;">
   <input type="hidden" name="tarea_id" value="<?php echo $tarea['id']; ?>">

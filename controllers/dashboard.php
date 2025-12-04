@@ -351,6 +351,58 @@ fetch('../controllers/actualizar_estado_tarea.php', {
     }
   });
 
+// ========================
+//   SUBTAREAS - ELIMINAR
+// ========================
+
+document.addEventListener('click', function(e) {
+    const deleteBtn = e.target.closest('.subtask-delete-btn');
+    if (!deleteBtn) return;
+
+    const li = deleteBtn.closest('.subtask-item');
+    if (!li) return;
+
+    const id = li.dataset.id;
+    if (!id) return;
+
+    // Enviar directamente sin confirmar
+    fetch('../controllers/subtareas_eliminar.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'id=' + encodeURIComponent(id)
+    })
+    .then(r => r.text().then(text => ({ ok: r.ok, status: r.status, text })))
+    .then(res => {
+      console.log('Eliminar subtarea:', res);
+
+      if (!res.ok || res.text.trim() !== 'ok') {
+        alert('No se pudo eliminar la subtarea: ' + res.text);
+      } else {
+        const ul = li.closest('.subtask-list');
+        li.remove();
+
+        // Si ya no hay subtareas, mostramos "No hay subtareas"
+        if (ul && ul.querySelectorAll('.subtask-item').length === 0) {
+          let empty = ul.querySelector('.subtask-empty');
+          if (!empty) {
+            empty = document.createElement('li');
+            empty.classList.add('subtask-empty');
+            empty.textContent = 'No hay subtareas';
+            ul.appendChild(empty);
+          }
+        }
+      }
+    })
+    .catch(err => {
+      console.error('Error al eliminar subtarea:', err);
+      alert('Error de red al eliminar la subtarea');
+    });
+});
+
+
+
 </script>
 
 

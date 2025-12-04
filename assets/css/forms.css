@@ -108,6 +108,15 @@
   align-items: center;
   gap: 10px; 
   cursor: pointer;
+  flex: 1;
+}
+
+.subtask-item {
+  display: flex;              
+  align-items: center;        
+  justify-content: space-between; 
+  gap: 6px;                   
+  margin-bottom: 4px;         
 }
 
 .subtask-item input[type="checkbox"] {
@@ -138,7 +147,7 @@
   font-size: 14px;
   outline: none;
   transition: all 0.2s ease;
-  height: 30px; /* para empatar altura con el botón */
+  height: 30px;
 }
 
 .modal-box h3 {
@@ -159,3 +168,15 @@
   text-decoration: none;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+
+.subtask-delete-btn {          /* NUEVO */
+  background: white;
+  border: none;
+  color: red;
+  border: 1px solid red;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
