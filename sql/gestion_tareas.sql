@@ -24,6 +24,18 @@ CREATE TABLE tareas (
   actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 2.1) Crear tabla de subtareas
+DROP TABLE IF EXISTS subtareas;
+
+CREATE TABLE subtareas (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  tarea_id INT UNSIGNED NOT NULL,
+  titulo VARCHAR(255) NOT NULL,
+  completada TINYINT(1) NOT NULL DEFAULT 0,
+  creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (tarea_id) REFERENCES tareas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- 3) Insertar datos de ejemplo para que coincidan con tu dashboard
 
 INSERT INTO tareas (id, titulo, descripcion, fecha_inicio, fecha_fin, estado)

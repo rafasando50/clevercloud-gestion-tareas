@@ -283,6 +283,74 @@ fetch('../controllers/actualizar_estado_tarea.php', {
 
     });
   });
+
+    // ========================
+  //     SUBTAREAS - TOGGLE
+  // ========================
+
+  document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('subtask-toggle')) {
+      const checkbox = e.target;
+      const id = checkbox.dataset.id;
+      const completada = checkbox.checked ? '1' : '0';
+
+      fetch('../controllers/subtareas_toggle.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'id=' + encodeURIComponent(id) +
+              '&completada=' + encodeURIComponent(completada)
+      })
+      .then(r => r.text().then(text => ({ ok: r.ok, status: r.status, text })))
+      .then(res => {
+        console.log('Toggle subtarea:', res);
+        if (!res.ok || res.text.trim() !== 'ok') {
+          alert('No se pudo actualizar la subtarea: ' + res.text);
+          // Revertir visualmente
+          checkbox.checked = !checkbox.checked;
+        } else {
+          const li = checkbox.closest('.subtask-item');
+          if (li) {
+            li.classList.toggle('subtask-completada', checkbox.checked);
+          }
+        }
+      })
+      .catch(err => {
+        console.error('Error en toggle subtarea:', err);
+        alert('Error de red al actualizar la subtarea');
+        checkbox.checked = !checkbox.checked;
+      });
+    }
+  });
+
+  // ========================
+  //   SUBTAREAS - AGREGAR
+  // ========================
+
+  document.addEventListener('submit', function(e) {
+    if (e.target.classList.contains('subtask-form')) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      fetch('../controllers/subtareas_agregar.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(r => r.text())
+      .then(html => {
+        // Volvemos a pintar el contenido del modal completo
+        modalContent.innerHTML = html;
+      })
+      .catch(err => {
+        console.error('Error al agregar subtarea:', err);
+        alert('No se pudo agregar la subtarea');
+      });
+    }
+  });
+
 </script>
 
 
