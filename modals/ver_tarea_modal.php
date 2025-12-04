@@ -71,10 +71,6 @@ $stmt_sub->close();
   <?php echo $tarea["creado_en"]; ?>
 </p>
 
-<p><strong>Última actualización:</strong>
-  <?php echo $tarea["actualizado_en"]; ?>
-</p>
-
 <hr>
 
 <h3>Subtareas</h3>
@@ -107,7 +103,7 @@ $stmt_sub->close();
     placeholder="Nueva subtarea..."
     required
   >
-  <button type="submit" class="btn-primary">Agregar subtarea</button>
+  <button type="submit" class="subtask-btn-primary">Agregar</button>
 </form>
 
 <hr>
@@ -115,32 +111,3 @@ $stmt_sub->close();
 <div class="btn-group" style="margin-top: 1rem;">
   <a href="editar_tarea.php?id=<?php echo $tarea['id']; ?>" class="btn-primary-editar">Editar</a>
 </div>
-
-<form method="POST" action="../controllers/actualizar_estado_tarea.php" class="btn-group">
-  <input type="hidden" name="id" value="<?php echo $tarea['id']; ?>">
-
-  <?php if ($tarea['estado'] === 'pendiente'): ?>
-    <button type="submit" name="estado" value="en_curso" class="btn-primary">
-      Mover a "En curso"
-    </button>
-    <button type="submit" name="estado" value="terminada" class="btn-primary">
-      Marcar como "Terminada"
-    </button>
-
-  <?php elseif ($tarea['estado'] === 'en_curso'): ?>
-    <button type="submit" name="estado" value="pendiente" class="btn-primary">
-      Mover a "Pendientes"
-    </button>
-    <button type="submit" name="estado" value="terminada" class="btn-primary">
-      Marcar como "Terminada"
-    </button>
-
-  <?php elseif ($tarea['estado'] === 'terminada'): ?>
-    <button type="submit" name="estado" value="en_curso" class="btn-primary">
-      Mover a "En curso"
-    </button>
-    <button type="submit" name="estado" value="pendiente" class="btn-primary">
-      Mover a "Pendientes"
-    </button>
-  <?php endif; ?>
-</form>

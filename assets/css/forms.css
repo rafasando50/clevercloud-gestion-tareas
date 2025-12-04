@@ -102,3 +102,60 @@
   color: white;
   font-weight: bold;
 }
+
+.subtask-item label {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  cursor: pointer;
+}
+
+.subtask-item input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px;    
+  height: 15px;
+  cursor: pointer;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.subtask-item input[type="checkbox"]:checked {
+  background-color: #1e40af; 
+  border-color: #000;
+}
+
+.subtask-list {
+  list-style: none; 
+  padding-left: 0;  
+  margin-left: 0;
+}
+
+.subtask-form input[type="text"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  height: 30px; /* para empatar altura con el botón */
+}
+
+.modal-box h3 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.modal-box hr {
+  margin-top: 10px;
+}
+
+.subtask-btn-primary {
+  background-color: #1e40af;
+  color: white;
+  border-radius: 4px;
+  font-size: 15px;
+  padding: 3px 15px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
